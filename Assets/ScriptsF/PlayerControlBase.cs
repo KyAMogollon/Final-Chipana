@@ -52,6 +52,8 @@ public class PlayerControlBase : MonoBehaviour
 
     // Referencia al SpriteRenderer
     public SpriteRenderer spriteRenderer;
+    [SerializeField] Canvas canvasPause;
+    bool isPaused = true;
 
     private void Awake()
     {
@@ -115,6 +117,7 @@ public class PlayerControlBase : MonoBehaviour
         input.Ingame.Dash.performed += OnDashPerformed;
         input.Ingame.Fire.performed += OnFirePerformed;
         input.Ingame.Fire.canceled += OnFireCancelled;
+        input.Ingame.Canvas.performed += OnPause;
     }
 
     private void OnDisable()
@@ -125,6 +128,7 @@ public class PlayerControlBase : MonoBehaviour
         input.Ingame.Dash.performed -= OnDashPerformed;
         input.Ingame.Fire.performed -= OnFirePerformed;
         input.Ingame.Fire.canceled -= OnFireCancelled;
+        input.Ingame.Canvas.performed -= OnPause;
     }
 
     private void OnMovementPerformed(InputAction.CallbackContext context)
@@ -143,6 +147,11 @@ public class PlayerControlBase : MonoBehaviour
         {
             StartCoroutine(StartDashCoroutine());
         }
+    }
+    private void OnPause(InputAction.CallbackContext context)
+    {
+        Debug.Log("Hola");
+        Pause();
     }
 
     private void OnFirePerformed(InputAction.CallbackContext context)
@@ -190,7 +199,21 @@ public class PlayerControlBase : MonoBehaviour
             Destroy(powerUp.gameObject);
         }
     }
-
+    private void Pause()
+    {
+        if (isPaused == true)
+        {
+            Time.timeScale = 0;
+            canvasPause.gameObject.SetActive(true);
+            isPaused = false;
+        }
+        else if (isPaused == false)
+        {
+            Time.timeScale = 1;
+            canvasPause.gameObject.SetActive(false);
+            isPaused = true;
+        }
+    }
     private void CalculateCameraBounds()
     {
         float cameraHeight = mainCamera.orthographicSize;

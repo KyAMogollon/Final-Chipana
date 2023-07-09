@@ -53,6 +53,15 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Canvas"",
+                    ""type"": ""Button"",
+                    ""id"": ""83fe3715-9e39-4c08-a15c-c21fe4f11cfb"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -132,6 +141,17 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
                     ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""5fb58924-d16c-4ba8-995c-9e7d3521efd1"",
+                    ""path"": ""<Keyboard>/escape"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Canvas"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -143,6 +163,7 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
         m_Ingame_Movement = m_Ingame.FindAction("Movement", throwIfNotFound: true);
         m_Ingame_Dash = m_Ingame.FindAction("Dash", throwIfNotFound: true);
         m_Ingame_Fire = m_Ingame.FindAction("Fire", throwIfNotFound: true);
+        m_Ingame_Canvas = m_Ingame.FindAction("Canvas", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -207,6 +228,7 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_Ingame_Movement;
     private readonly InputAction m_Ingame_Dash;
     private readonly InputAction m_Ingame_Fire;
+    private readonly InputAction m_Ingame_Canvas;
     public struct IngameActions
     {
         private @CustomInput m_Wrapper;
@@ -214,6 +236,7 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
         public InputAction @Movement => m_Wrapper.m_Ingame_Movement;
         public InputAction @Dash => m_Wrapper.m_Ingame_Dash;
         public InputAction @Fire => m_Wrapper.m_Ingame_Fire;
+        public InputAction @Canvas => m_Wrapper.m_Ingame_Canvas;
         public InputActionMap Get() { return m_Wrapper.m_Ingame; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -232,6 +255,9 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
             @Fire.started += instance.OnFire;
             @Fire.performed += instance.OnFire;
             @Fire.canceled += instance.OnFire;
+            @Canvas.started += instance.OnCanvas;
+            @Canvas.performed += instance.OnCanvas;
+            @Canvas.canceled += instance.OnCanvas;
         }
 
         private void UnregisterCallbacks(IIngameActions instance)
@@ -245,6 +271,9 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
             @Fire.started -= instance.OnFire;
             @Fire.performed -= instance.OnFire;
             @Fire.canceled -= instance.OnFire;
+            @Canvas.started -= instance.OnCanvas;
+            @Canvas.performed -= instance.OnCanvas;
+            @Canvas.canceled -= instance.OnCanvas;
         }
 
         public void RemoveCallbacks(IIngameActions instance)
@@ -267,5 +296,6 @@ public partial class @CustomInput: IInputActionCollection2, IDisposable
         void OnMovement(InputAction.CallbackContext context);
         void OnDash(InputAction.CallbackContext context);
         void OnFire(InputAction.CallbackContext context);
+        void OnCanvas(InputAction.CallbackContext context);
     }
 }
